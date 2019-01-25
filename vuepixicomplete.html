@@ -95,7 +95,7 @@ var app = new Vue({
 
     // degree->radian
     deg2rad: function(deg) {
-      return(Math.PI * deg / 180.0);
+      return(deg * PIXI.DEG_TO_RAD);
     },
   },
   // マウントされた際に呼び出される関数

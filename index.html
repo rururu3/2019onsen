@@ -8,6 +8,7 @@
 </head>
 <body>
   <div id="app">
+    <input v-model.number="r" placeholder="半径">
     <div ref="pixi"></div>
   </div>
 </body>
@@ -19,6 +20,9 @@ var app = new Vue({
   el: '#app',
   data: {
     pixiApp: {},
+    r: 100,
+    // 時間
+    t: 0,
   },
   methods: {
   },
@@ -26,6 +30,8 @@ var app = new Vue({
   mounted: function() {
     this.pixiApp = new PIXI.Application(SCREEN_X, SCREEN_Y, {backgroundColor : 0x1099bb});
     this.$refs.pixi.appendChild(this.pixiApp.view);
+
+    console.log(PIXI.DEG_TO_RAD);
 
     // 画像表示
     {
@@ -42,9 +48,36 @@ var app = new Vue({
       this.pixiApp.stage.addChild(this.bunny);
     }
 
+    {
+      // var container = new PIXI.Container();
+      // this.pixiApp.stage.addChild(container);
+
+      // create a new Sprite from an image path
+      this.bunny2 = PIXI.Sprite.fromImage('examples-gh-pages/required/assets/basics/bunny.png')
+
+      // center the sprite's anchor point
+      this.bunny2.anchor.set(0.5);
+
+      // move the sprite to the center of the screen
+      this.bunny2.x = this.pixiApp.screen.width / 2;
+      this.bunny2.y = this.pixiApp.screen.height / 2;
+
+      this.bunny.addChild(this.bunny2);
+    }
+
     // 毎フレームこの関数が呼ばれます
     this.pixiApp.ticker.add((delta) => {
-      console.log(delta);
+      // 1フレームの時間を求める
+      var _deltaTime = 1.0 / this.pixiApp.ticker.FPS;
+
+      this.bunny.x = this.r * Math.cos(this.t) + SCREEN_X / 2;
+      this.bunny.y = this.r * Math.sin(this.t) + SCREEN_Y / 2;
+
+      this.bunny2.x = (this.r / 5) * Math.cos(this.t * 5);
+      this.bunny2.y = (this.r / 5) * Math.sin(this.t * 5);
+
+      // 時間加算
+      this.t = this.t + _deltaTime;
     });
   },
 });
