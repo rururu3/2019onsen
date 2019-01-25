@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>vuejs + pixi.js モンキーハンティング</title>
+<script src="vue.min.js"></script>
+<script src="pixi.min.js"></script>
+</head>
+<body>
+  <div id="app">
+      <input v-model="v0Model" placeholder="初速度">
+      <input v-model="degModel" placeholder="角度(度)">
+      <button v-on:click="resetButtonClick">リセット</button>
+    画像の位置<br />
+    X: {{ bunny.x }}<br />
+    Y: {{ bunny.y }}<br />
+    <br />
+    ○の位置<br />
+    X: {{ circle.x }}<br />
+    Y: {{ circle.y }}<br />
+    <br />
+    {{ hitString }}
+    <div ref="pixi"></div>
+  </div>
+</body>
+<script>
+var SCREEN_X = 800;
+var SCREEN_Y = 600;
+
+// 重力加速度
+var G = 9.8;
+
+// ○初期位置
+var circleInitX = 0;
+var circleInitY = SCREEN_Y;
+
+// 画像初期位置
+var bunnyInitX = SCREEN_X - 100;
+var bunnyInitY = 100;
+
+// Vue
+var app = new Vue({
+  el: '#app',
+  data: {
+    // PixiJSライブラリ
+    pixiApp: {},
+    // 画像
+    bunny: {},
+    // ○
+    circle: {},
+
+    // あたったかどうか
+    isHit: false,
+    hitRange: 3,
+
+    // 投げる方向(UIから変更用)
+    v0Model: 200,
+    degModel: 30, // Math.atan2(circleInitY - bunnyInitY, bunnyInitX - circleInitX) * 180 / Math.PI
+    // 投げる方向(アニメーション用)
+    v0: 0,
+    deg: 0,
+
+    // 時間
+    t: 0,
+  },
+  computed: {
+    hitString: function() {
+      return(this.isHit ? 'あたった' : 'あたってない');
+    },
+  },
+  methods: {
+    // リセットボタン押されたとき
+    resetButtonClick: function(e) {
+      this.initiazlie();
+    },
+
+    initiazlie: function() {
+      this.isHit = false;
+
+      // ○の初期位置設定
+      this.circle.x = circleInitX;
+      this.circle.y = circleInitY;
+
+      // 画像の初期位置設定
+      this.bunny.x = bunnyInitX;
+      this.bunny.y = bunnyInitY;
+
+      // 時間初期化
+      this.t = 0;
+
+      // 初期速度
+      this.v0 = this.v0Model;
+      this.deg = this.degModel;
+    },
+
+    // degree->radian
+    deg2rad: function(deg) {
+      return(Math.PI * deg / 180.0);
+    },
+  },
+  // マウントされた際に呼び出される関数
+  mounted: function() {
+    this.pixiApp = new PIXI.Application(SCREEN_X, SCREEN_Y, {backgroundColor : 0x1099bb});
+    this.$refs.pixi.appendChild(this.pixiApp.view);
+
+    // 画像表示
+    {
+      // create a new Sprite from an image path
+      this.bunny = PIXI.Sprite.fromImage('examples-gh-pages/required/assets/basics/bunny.png')
+
+      // center the sprite's anchor point
+      this.bunny.anchor.set(0.5);
+
+      // move the sprite to the center of the screen
+      this.bunny.x = this.pixiApp.screen.width / 2;
+      this.bunny.y = this.pixiApp.screen.height / 2;
+
+      this.pixiApp.stage.addChild(this.bunny);
+    }
+
+    // ○表示
+    {
+      this.circle = new PIXI.Graphics();
+      this.circle.lineStyle(0);
+      this.circle.beginFill(0xFFFF0B, 0.5);
+      this.circle.drawCircle(0, 0, 5);
+      this.circle.endFill();
+
+      this.pixiApp.stage.addChild(this.circle);
+    }
+
+    // 初期化
+    this.initiazlie();
+
+    // 毎フレームこの関数が呼ばれます
+    this.pixiApp.ticker.add((delta) => {
+      // 落ち過ぎたら更新しない
+      if(this.circle.y > SCREEN_Y * 1.2 || this.bunny.y > SCREEN_Y * 1.2) {
+        return;
+      }
+
+      // 1フレームの時間を求める
+      var _deltaTime = 1.0 / this.pixiApp.ticker.FPS;
+
+      // 時間加算
+      this.t = this.t + _deltaTime;
+
+      // ○の位置を決める
+      {
+        // Xの位置は直線運動でわかる(x = vt)
+        this.circle.x = circleInitX + Math.cos(this.deg2rad(this.deg)) * this.v0 * this.t;
+
+        // Yの位置は等加速度運動でわかる(y = vt + 1/2at^2)
+        this.circle.y = circleInitY
+          -Math.sin(this.deg2rad(this.deg)) * this.v0 * this.t
+          + (1.0 / 2.0) * G * Math.pow(this.t, 2);
+      }
+
+      // 画像の位置を決める
+      {
+        // Xは動かない
+
+        // Yの位置は等加速度運動でわかる(y = vt + 1/2at^2)
+        this.bunny.y = bunnyInitY
+          -Math.sin(this.deg2rad(this.deg)) * 0 * this.t
+          + (1.0 / 2.0) * G * Math.pow(this.t, 2);
+      }
+
+      // 当たり判定をする
+      if(this.isHit == false) {
+        this.isHit = 
+          (Math.pow(this.bunny.x - this.circle.x, 2) + Math.pow(this.bunny.y - this.circle.y, 2) < Math.pow(this.hitRange, 2));
+      }
+    });
+  },
+});
+
+
+</script>
+</html>

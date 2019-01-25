@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>vuejs + pixi.js 円運動</title>
+<script src="vue.min.js"></script>
+<script src="pixi.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <div ref="pixi"></div>
+  </div>
+</body>
+<script>
+var SCREEN_X = 800;
+var SCREEN_Y = 600;
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    pixiApp: {},
+  },
+  methods: {
+  },
+  // マウントされた際に呼び出される関数
+  mounted: function() {
+    this.pixiApp = new PIXI.Application(SCREEN_X, SCREEN_Y, {backgroundColor : 0x1099bb});
+    this.$refs.pixi.appendChild(this.pixiApp.view);
+
+    // 画像表示
+    {
+      // create a new Sprite from an image path
+      this.bunny = PIXI.Sprite.fromImage('examples-gh-pages/required/assets/basics/bunny.png')
+
+      // center the sprite's anchor point
+      this.bunny.anchor.set(0.5);
+
+      // move the sprite to the center of the screen
+      this.bunny.x = this.pixiApp.screen.width / 2;
+      this.bunny.y = this.pixiApp.screen.height / 2;
+
+      this.pixiApp.stage.addChild(this.bunny);
+    }
+
+    // 毎フレームこの関数が呼ばれます
+    this.pixiApp.ticker.add((delta) => {
+      console.log(delta);
+    });
+  },
+});
+</script>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>vuejsテンプレート</title>
+<script src="vue.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <input v-model="message" placeholder="edit me">
+    <button v-on:click="buttonClick">ボタン</button>
+    <p>Message is: {{ message }}</p>
+  </div>
+</body>
+<script>
+var app = new Vue({
+  el: '#app',
+  data: {
+    message: '',
+  },
+  methods: {
+    buttonClick: function(e) {
+      console.log(e);
+    }
+  },
+  // マウントされた際に呼び出される関数
+  mounted: function() {
+  },
+});
+</script>
+</html>
