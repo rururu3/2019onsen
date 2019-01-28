@@ -2,13 +2,15 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>vuejs + pixi.js 円運動</title>
+<title>vuejs + pixi.js 単振動</title>
 <script src="vue.min.js"></script>
 <script src="pixi.min.js"></script>
 </head>
 <body>
   <div id="app">
-    <input v-model.number="r" placeholder="半径">
+    角速度:<input v-model.number="w" placeholder="角速度">
+    <br />
+    振幅:<input v-model.number="r" placeholder="振幅">
     <div ref="pixi"></div>
   </div>
 </body>
@@ -20,6 +22,7 @@ var app = new Vue({
   el: '#app',
   data: {
     pixiApp: {},
+    w: 1,
     r: 100,
     // 時間
     t: 0,
@@ -46,33 +49,12 @@ var app = new Vue({
       this.pixiApp.stage.addChild(this.bunny);
     }
 
-    {
-      // var container = new PIXI.Container();
-      // this.pixiApp.stage.addChild(container);
-
-      // create a new Sprite from an image path
-      this.bunny2 = PIXI.Sprite.fromImage('examples-gh-pages/required/assets/basics/bunny.png')
-
-      // center the sprite's anchor point
-      this.bunny2.anchor.set(0.5);
-
-      // move the sprite to the center of the screen
-      this.bunny2.x = this.pixiApp.screen.width / 2;
-      this.bunny2.y = this.pixiApp.screen.height / 2;
-
-      this.bunny.addChild(this.bunny2);
-    }
-
     // 毎フレームこの関数が呼ばれます
     this.pixiApp.ticker.add((delta) => {
       // 1フレームの時間を求める
       var _deltaTime = 1.0 / this.pixiApp.ticker.FPS;
 
-      this.bunny.x = this.r * Math.cos(this.t) + SCREEN_X / 2;
-      this.bunny.y = this.r * Math.sin(this.t) + SCREEN_Y / 2;
-
-      this.bunny2.x = (this.r / 5) * Math.cos(this.t * 5);
-      this.bunny2.y = (this.r / 5) * Math.sin(this.t * 5);
+      this.bunny.x = this.r * Math.cos(this.w * this.t) + SCREEN_X / 2;
 
       // 時間加算
       this.t = this.t + _deltaTime;

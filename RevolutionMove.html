@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>vuejs + pixi.js 円運動</title>
+<title>vuejs + pixi.js 公転</title>
 <script src="vue.min.js"></script>
 <script src="pixi.min.js"></script>
 </head>
@@ -30,6 +30,8 @@ var app = new Vue({
   mounted: function() {
     this.pixiApp = new PIXI.Application(SCREEN_X, SCREEN_Y, {backgroundColor : 0x1099bb});
     this.$refs.pixi.appendChild(this.pixiApp.view);
+
+    console.log(PIXI.DEG_TO_RAD);
 
     // 画像表示
     {
