@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>vuejs 外積</title>
+<script src="vue.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    aVector:
+    <input v-model.number="a.x" placeholder="x">
+    <input v-model.number="a.y" placeholder="y">
+    <input v-model.number="a.z" placeholder="z">
+    <br />
+    bVector:
+    <input v-model.number="b.x" placeholder="x">
+    <input v-model.number="b.y" placeholder="y">
+    <input v-model.number="b.z" placeholder="z">
+    <br />
+    外積:
+    <br />
+    x: {{ vectorProduct.x }}
+    <br />
+    y: {{ vectorProduct.y }}
+    <br />
+    z: {{ vectorProduct.z }}
+    <br />
+  </div>
+</body>
+<script>
+var app = new Vue({
+  el: '#app',
+  data: {
+    pixiApp: {},
+    a: {x: 0, y: 0, z: 0},
+    b: {x: 0, y: 0, z: 0},
+  },
+  methods: {
+  },
+  computed: {
+    vectorProduct: function() {
+      return({
+        x: this.a.y * this.b.z - this.a.z * this.b.y,
+        y: this.a.z * this.b.x - this.a.x * this.b.z,
+        z: this.a.x * this.b.y - this.a.y * this.b.x,
+      })
+    }
+  }
+});
+</script>
+</html>

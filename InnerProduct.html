@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>vuejs 内積</title>
+<script src="vue.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    aVector:
+    <input v-model.number="a.x" placeholder="x">
+    <input v-model.number="a.y" placeholder="y">
+    <input v-model.number="a.z" placeholder="z">
+    <br />
+    bVector:
+    <input v-model.number="b.x" placeholder="x">
+    <input v-model.number="b.y" placeholder="y">
+    <input v-model.number="b.z" placeholder="z">
+    <br />
+    内積:{{ innerProduct }}
+    <br />
+    なす角: {{ innerProductSita }}
+  </div>
+</body>
+<script>
+var app = new Vue({
+  el: '#app',
+  data: {
+    pixiApp: {},
+    a: {x: 0, y: 0, z: 0},
+    b: {x: 0, y: 0, z: 0},
+  },
+  methods: {
+  },
+  computed: {
+    innerProduct: function() {
+      return(this.a.x * this.b.x + this.a.y * this.b.y + this.a.z * this.b.z);
+    },
+    innerProductSita: function() {
+      var _al = Math.sqrt(Math.pow(this.a.x, 2) + Math.pow(this.a.y, 2) + Math.pow(this.a.z, 2));
+      var _bl = Math.sqrt(Math.pow(this.b.x, 2) + Math.pow(this.b.y, 2) + Math.pow(this.b.z, 2));
+      var _rad = Math.PI / 2;
+      if(_al != 0 && _bl != 0) {
+        _rad = Math.acos(this.innerProduct / (_al * _bl));
+      }
+      return(_rad * 180 / Math.PI);
+    }
+  }
+});
+</script>
+</html>
