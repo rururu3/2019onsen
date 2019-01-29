@@ -2,13 +2,11 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>vuejsテンプレート</title>
+<title>面積</title>
 <script src="vue.min.js"></script>
 </head>
 <body>
   <div id="app">
-    <button v-on:click="buttonClick">ボタン</button>
-    <br />
     <!-- http://www.nyushi-sugaku.com/img/tyu1bunya.pdf -->
     <!-- 扇形の弧の長さ -->
     半径<input v-model.number="r1" placeholder="半径">
@@ -78,9 +76,6 @@ var app = new Vue({
     r8: 0,
   },
   methods: {
-    buttonClick: function(e) {
-      console.log(e);
-    },
   },
   computed: {
     ans1: function() {

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>率</title>
+<script src="vue.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- 割増し -->
+    <input v-model.number="p1" placeholder="値段">円の
+    <input v-model.number="r1" placeholder="割合">％増し
+    は{{ ans1 }}
+    <br />
+    <!-- 割引 -->
+    <input v-model.number="p2" placeholder="値段">円の
+    <input v-model.number="r2" placeholder="割合">％引き
+    は{{ ans2 }}
+    <br />
+    <!-- 食塩水 -->
+    食塩水<input v-model.number="ws3" placeholder="食塩水">
+    ｇの濃度<input v-model.number="r3" placeholder="濃度">
+    ％の塩は{{ ans31 }}ｇ、水は{{ ans32 }}ｇです
+    <br />
+  </div>
+</body>
+<script>
+var app = new Vue({
+  el: '#app',
+  data: {
+    // 割増し
+    p1: 0,
+    r1: 0,
+    // 割引
+    p2: 0,
+    r2: 0,
+    // 食塩水
+    ws3: 0,
+    r3: 0,
+  },
+  methods: {
+  },
+  computed: {
+    ans1: function() {
+      return(this.p1 * (1 + this.r1 / 100));
+    },
+    ans2: function() {
+      return(this.p2 * (1 - this.r2 / 100));
+    },
+    ans31: function() {
+      return(this.ws3 * this.r3 / 100);
+    },
+    ans32: function() {
+      return(this.ws3 - this.ans31);
+    },
+  },
+  // マウントされた際に呼び出される関数
+  mounted: function() {
+  },
+});
+</script>
+</html>
