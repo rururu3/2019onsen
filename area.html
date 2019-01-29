@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>vuejsテンプレート</title>
+<script src="vue.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <button v-on:click="buttonClick">ボタン</button>
+    <br />
+    <!-- http://www.nyushi-sugaku.com/img/tyu1bunya.pdf -->
+    <!-- 扇形の弧の長さ -->
+    半径<input v-model.number="r1" placeholder="半径">
+    中心角<input v-model.number="rad1" placeholder="中心角">
+    の扇形の弧の長さは{{ ans1 }}
+    <br />
+    <!-- 扇形の面積 -->
+    半径<input v-model.number="r2" placeholder="半径">
+    弧の長さ<input v-model.number="l2" placeholder="弧の長さ">
+    の扇形の面積は{{ ans2 }}
+    <br />
+    <!-- 柱体の体積 -->
+    底面積<input v-model.number="a3" placeholder="底面積">
+    高さ<input v-model.number="h3" placeholder="高さ">
+    の柱体の体積は{{ ans3 }}
+    <br />
+    <!-- 錐体の体積 -->
+    底面積<input v-model.number="a4" placeholder="底面積">
+    高さ<input v-model.number="h4" placeholder="高さ">
+    の錐体の体積は{{ ans4 }}
+    <br />
+    <!-- 円錐の側面積 -->
+    底面の円の半径<input v-model.number="r5" placeholder="底面の円の半径">
+    母線の長さ<input v-model.number="l5" placeholder="母線の長さ">
+    の円錐の側面積は{{ ans5 }}
+    <br />
+    <!-- 円錐の展開図における中心角 -->
+    底面の円の半径<input v-model.number="r6" placeholder="底面の円の半径">
+    母線の長さ<input v-model.number="l6" placeholder="母線の長さ">
+    の円錐の展開図における中心角は{{ ans6 }}
+    <br />
+    <!-- 球の表面積 -->
+    半径<input v-model.number="r7" placeholder="半径">
+    の球の表面積は{{ ans7 }}
+    <br />
+    <!-- 球の体積 -->
+    半径<input v-model.number="r8" placeholder="半径">
+    の球の体積は{{ ans8 }}
+    <br />
+  </div>
+</body>
+<script>
+var app = new Vue({
+  el: '#app',
+  data: {
+    // 扇形の弧の長さ
+    r1: 0,
+    rad1: 0,
+    // 扇形の面積
+    r2: 0,
+    l2: 0,
+    // 柱体の体積
+    a3: 0,
+    h3: 0,
+    // 錐体の体積
+    a4: 0,
+    h4: 0,
+    // 円錐の側面積
+    r5: 0,
+    l5: 0,
+    // 円錐の展開図における中心角
+    r6: 0,
+    l6: 0,
+    // 球の表面積
+    r7: 0,
+    // 球の体積
+    r8: 0,
+  },
+  methods: {
+    buttonClick: function(e) {
+      console.log(e);
+    },
+  },
+  computed: {
+    ans1: function() {
+      return(2 * Math.PI * this.r1 * this.rad1 / 360.0);
+    },
+    ans2: function() {
+      return(this.r2 * this.l2 / 2.0);
+    },
+    ans3: function() {
+      return(this.a3 * this.h3);
+    },
+    ans4: function() {
+      return(this.a4 * this.h4 / 3.0);
+    },
+    ans5: function() {
+      return(this.l5 * this.r5 * Math.PI);
+    },
+    ans6: function() {
+      return(360.0 * this.r6 / this.l6);
+    },
+    ans7: function() {
+      return(4 * Math.PI * Math.pow(this.r7, 2));
+    },
+    ans8: function() {
+      return(4 * Math.PI * Math.pow(this.r8, 3) / 3);
+    },
+  },
+  // マウントされた際に呼び出される関数
+  mounted: function() {
+  },
+});
+</script>
+</html>
